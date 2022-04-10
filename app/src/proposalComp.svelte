@@ -106,7 +106,7 @@
             })}
         </div> -->
 	<div class="proposal-card-details">
-		<div class="proposal-card-url">
+		<div class="proposal-card-url" >
 			{voters.length} Voters.
 		</div>
 		<div class="proposal-card-url">
@@ -143,7 +143,7 @@
 		height: 100%;
 		padding: 25px;
 		border-radius: 10px;
-		background-color: #fafafa;
+		background-color: #ffbf00;
 		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 		font-size: 0.8em;
 	}
@@ -157,7 +157,7 @@
 		height: 50%;
 		padding: 10px;
 
-		background-color: #fafafa;
+
 	}
 
 	.proposal-card-details {
@@ -169,7 +169,7 @@
 		height: 50%;
 		padding: 10px;
 
-		background-color: #fafafa;
+
 	}
 
 
@@ -190,7 +190,7 @@
 		align-items: left;
 		width: 100%;
 		height: 50%;
-		padding: 10px;
+		padding: 0 10px 10px 10px;
 		border-radius: 10px;
 		background-color: #fafafa;
 		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -199,8 +199,9 @@
     .proposal-card-answer {
         margin: 5px 0 0 0;
         border-radius: 10px;
-        background-color: #fafafa;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ffbf00;
+        
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     }
 
     .proposal-card-answer-title {
