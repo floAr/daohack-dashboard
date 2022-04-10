@@ -116,11 +116,11 @@
 		</div>
 	</div>
 	<div class="proposal-card-answers">
-		Answers:
+		<h2>Answers:</h2>
 		{#each answers as anwer, i}
 			<div class="proposal-card-answer">
 				<div class="proposal-card-answer-title">
-					<h2>"{anwer}" - ({getAnswerWeight(answer_weights[i]).toFixed(2)}%)</h2>
+					<h3>"{anwer}" - ({getAnswerWeight(answer_weights[i]).toFixed(2)}%)</h3>
 					<StackedBar
 						id={i.toString()}
 						values={answer_weights[i]}
@@ -141,7 +141,7 @@
 		align-items: center;
 		width: 100%;
 		height: 100%;
-		padding: 10px;
+		padding: 25px;
 		border-radius: 10px;
 		background-color: #fafafa;
 		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -172,18 +172,6 @@
 		background-color: #fafafa;
 	}
 
-	.proposal-card-description {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		width: 100%;
-		height: 50%;
-		padding: 10px;
-
-		background-color: #fafafa;
-		letter-spacing: -1px;
-	}
 
 	.proposal-card-url {
 		display: flex;
@@ -207,4 +195,15 @@
 		background-color: #fafafa;
 		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 	}
+
+    .proposal-card-answer {
+        margin: 5px 0 0 0;
+        border-radius: 10px;
+        background-color: #fafafa;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .proposal-card-answer-title {
+       text-align: center;
+    }
 </style>

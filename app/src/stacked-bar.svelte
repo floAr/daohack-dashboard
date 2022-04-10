@@ -50,10 +50,11 @@
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1em;
+    padding-bottom: 1em;
     width: ${total_width}%`}>
 	{#each values as value}
 		<div id={id+value.value} class="stacked-bar-line-item" style={getStyle(value)} />
 	{/each}
 </div>
+
 
