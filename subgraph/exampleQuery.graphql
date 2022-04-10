@@ -1,0 +1,9 @@
+{
+users(where:{
+  id:"0x6d8dec3fd68d94a7189a98346ea52b4d32e00012"
+}){id
+attributeMap(orderBy:count, orderDirection:desc){id
+trait_type
+value
+count}}
+}
