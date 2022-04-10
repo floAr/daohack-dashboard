@@ -17,7 +17,7 @@
 
 	const getStyle = (value: Trait) => {
 		var style = '';
-		let width = (value.weight / total_count) * total_width;
+		let width = (value.weight / total_count) * 100;
 		style += `width: ${width}%; height:15px;`;
 		style += `background-color: ${getColor(value.value)};`;
 		console.log(style);
@@ -47,19 +47,15 @@
 
 <!-- horizonally stacked bar chart -->
 
-<div class="stacked-bar-line">
+<div class="stacked-bar-line" style={`display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+    width: ${total_width}%`}>
 	{#each values as value}
 		<div id={id+value.value} class="stacked-bar-line-item" style={getStyle(value)} />
 	{/each}
 </div>
 
-<style>
-	.stacked-bar-line {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 1em;
-	}
-</style>

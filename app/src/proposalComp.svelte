@@ -3,7 +3,7 @@
 
 	import { fetchVoters, type Voter } from './graphql/proposals';
 	import { fetchVoterWeight, type Trait } from './graphql/statistics';
-import StackedBar from './stacked-bar.svelte';
+	import StackedBar from './stacked-bar.svelte';
 
 	// import { marked } from 'marked';
 	export let title: string;
@@ -19,14 +19,14 @@ import StackedBar from './stacked-bar.svelte';
 
 	const updateVoters = async () => {
 		voters = await fetchVoters(id);
-		var new_global_weights:Trait[] = [];
-		var new_answer_weights:Trait[][] = [];
+		var new_global_weights: Trait[] = [];
+		var new_answer_weights: Trait[][] = [];
 		for (let i = 0; i < answers.length; i++) {
 			new_answer_weights[i] = [];
 		}
 		for (let i = 0; i < voters.length; i++) {
 			let voter_weights = await fetchVoterWeight(voters[i].voter);
-			let voter_choice = voters[i].choice-1;
+			let voter_choice = voters[i].choice - 1;
 			voter_weights.traits.forEach((trait) => {
 				// add to global weights for normalization
 				let found = false;
@@ -37,33 +37,55 @@ import StackedBar from './stacked-bar.svelte';
 					}
 				}
 				if (!found) {
-					new_global_weights.push({ value: trait.value, weight: trait.weight,weight_normalized:0 });
+					new_global_weights.push({
+						value: trait.value,
+						weight: trait.weight,
+						weight_normalized: 0
+					});
 				}
 
 				// add ot answer weights
 				found = false;
-                let new_answer_weight = new_answer_weights[voter_choice];
-                for (let j = 0; j < new_answer_weight.length; j++) {
-                    if (new_answer_weight[j].value == trait.value) {
-                        new_answer_weight[j].weight += trait.weight;
-                        found = true;
-                    }
-                }
-                if (!found) {
-                    new_answer_weight.push({ value: trait.value, weight: trait.weight,weight_normalized:0 } );
-                }
-                new_answer_weights[voter_choice] = new_answer_weight;
-
+				let new_answer_weight = new_answer_weights[voter_choice];
+				for (let j = 0; j < new_answer_weight.length; j++) {
+					if (new_answer_weight[j].value == trait.value) {
+						new_answer_weight[j].weight += trait.weight;
+						found = true;
+					}
+				}
+				if (!found) {
+					new_answer_weight.push({
+						value: trait.value,
+						weight: trait.weight,
+						weight_normalized: 0
+					});
+				}
+				new_answer_weights[voter_choice] = new_answer_weight;
 			});
 		}
 		total_weights = new_global_weights;
-        answer_weights = new_answer_weights;
+		answer_weights = new_answer_weights;
 		console.log(total_weights);
-        console.log(answer_weights);
+		console.log(answer_weights);
+	};
+
+	const getAnswerWeight = (answer_weights: Trait[]) => {
+		let answer_weight = 0;
+		let total_weight = 0;
+		for (let i = 0; i < answer_weights.length; i++) {
+			answer_weight += answer_weights[i].weight;
+		}
+		for (let i = 0; i < total_weights.length; i++) {
+			total_weight += total_weights[i].weight;
+		}
+
+		console.log(answer_weight);
+		console.log(total_weight);
+		return (answer_weight / total_weight) * 100;
 	};
 
 	onMount(() => {
-        updateVoters();
+		updateVoters();
 		// it's not safe to have an unchecked timer running -- problems would
 		// occur if the component is destroyed before the timeout has ellapsed,
 		// that's why we're using the `onMount` lifecycle function and its
@@ -99,11 +121,16 @@ import StackedBar from './stacked-bar.svelte';
 	</div>
 	<div class="proposal-card-answers">
 		Answers:
-		{#each answers as anwer,i}
+		{#each answers as anwer, i}
 			<div class="proposal-card-answer">
 				<div class="proposal-card-answer-title">
-					<h2>{anwer}</h2>
-                    <StackedBar id={i.toString()} values={answer_weights[i]} total_width={100} />
+					<h2>"{anwer}" - ({getAnswerWeight(answer_weights[i]).toFixed(2)}%)</h2>
+					<StackedBar
+						id={i.toString()}
+						values={answer_weights[i]}
+						total_width={getAnswerWeight(answer_weights[i])}
+					/>
+                    
 				</div>
 			</div>
 		{/each}
