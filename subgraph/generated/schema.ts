@@ -23,6 +23,7 @@ export class Token extends Entity {
     this.set("image", Value.fromString(""));
     this.set("name", Value.fromString(""));
     this.set("description", Value.fromString(""));
+    this.set("trait", Value.fromString(""));
     this.set("owner", Value.fromString(""));
     this.set("updatedAtTimestamp", Value.fromBigInt(BigInt.zero()));
   }
@@ -115,6 +116,15 @@ export class Token extends Entity {
     this.set("description", Value.fromString(value));
   }
 
+  get trait(): string {
+    let value = this.get("trait");
+    return value!.toString();
+  }
+
+  set trait(value: string) {
+    this.set("trait", Value.fromString(value));
+  }
+
   get owner(): string {
     let value = this.get("owner");
     return value!.toString();
@@ -139,7 +149,6 @@ export class Attribute extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("trait_type", Value.fromString(""));
     this.set("value", Value.fromString(""));
     this.set("count", Value.fromBigInt(BigInt.zero()));
     this.set("owner", Value.fromString(""));
@@ -168,15 +177,6 @@ export class Attribute extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
-  }
-
-  get trait_type(): string {
-    let value = this.get("trait_type");
-    return value!.toString();
-  }
-
-  set trait_type(value: string) {
-    this.set("trait_type", Value.fromString(value));
   }
 
   get value(): string {

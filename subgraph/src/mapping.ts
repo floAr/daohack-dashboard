@@ -8,6 +8,43 @@ import {
 } from '../generated/schema'
 
 const ipfshash = "QmaSS3Tw398Z4StpyYWcSuXV2cUq48gzrXbXcbReQDHpSi"
+const type_name = "type"
+
+const manipulateAttributeMap = (user: User, trait_type: string, value: string, change: BigInt): void => {
+  let attr_id = user.id + '-' + trait_type + '-' + value
+  let amap = Attribute.load(attr_id)
+  if (!amap) {
+    amap = new Attribute(attr_id)
+    amap.owner = user.id
+    amap.value = value
+    amap.count = BigInt.zero()
+  }
+
+  amap.count = amap.count.plus(change)
+  amap.save();
+}
+
+
+const applyAttributeMap = (event: TransferEvent, trait_type: string, token: Token): void => {
+  let value = token.getString(trait_type)
+  if (value) {
+    /* if the user does not yet exist, create them */
+    let user_to = User.load(event.params.to.toHexString())
+    if (!user_to) {
+      user_to = new User(event.params.to.toHexString())
+      user_to.save()
+    }
+
+    manipulateAttributeMap(user_to, trait_type, value, BigInt.fromI32(1))
+
+    // let user_from = User.load(event.params.from.toHexString())
+    // if (!user_from) {
+    //   user_from = new User(event.params.from.toHexString())
+    //   user_from.save()
+    // }
+    // manipulateAttributeMap(user_from, trait_type, value, BigInt.fromI32(-1))
+  }
+}
 
 
 
@@ -41,6 +78,8 @@ export function handleTransfer(event: TransferEvent): void {
         }
 
         const attributes = value.get('attributes')
+
+        // THIS IS THE BETTER WAY THAT SEEMS TO BREAK
         if (attributes) {
           let attributeArray = attributes.toArray();
           for (let i = 0; i < attributeArray.length; i++) {
@@ -50,8 +89,10 @@ export function handleTransfer(event: TransferEvent): void {
             if (trait_type && value) {
               // remove space with _ and convert to lowercase
               let type = trait_type.toString().replace(' ', '_').toLowerCase()
-              // token.setString(type, value.toString())
-              token.setString(type, value.toString())
+              if (type == type_name)
+                // This would be way cooler as it would work for all traits
+                //  token.setString(type, value.toString())
+                token.trait = value.toString()
             }
           }
         }
@@ -64,47 +105,25 @@ export function handleTransfer(event: TransferEvent): void {
   token.owner = event.params.to.toHexString()
 
   token.save()
-  applyAttributeMap(event, 'type', token)
-  // applyAttributeMap(event, 'hair', token)
-
-}
-
-const manipulateAttributeMap = (user: User, trait_type: string, value: string, change: BigInt): void => {
-  let attr_id = user.id + '-' + trait_type + '-' + value
-  let amap = Attribute.load(attr_id)
-  if (!amap) {
-    amap = new Attribute(attr_id)
-    amap.owner = user.id
-    amap.trait_type = trait_type
-    amap.value = value
-    amap.count = BigInt.zero()
+  let user_to = User.load(event.params.to.toHexString())
+  if (!user_to) {
+    user_to = new User(event.params.to.toHexString())
+    user_to.save()
   }
 
-  amap.count = amap.count.plus(change)
-  amap.save();
-}
-
-
-const applyAttributeMap = (event: TransferEvent, trait_type: string, token: Token): void => {
-  let value = token.getString(trait_type)
-  if (value) {
-    /* if the user does not yet exist, create them */
-    let user_to = User.load(event.params.to.toHexString())
-    if (!user_to) {
-      user_to = new User(event.params.to.toHexString())
-      user_to.save()
-    }
-
-    manipulateAttributeMap(user_to, trait_type, value, BigInt.fromI32(1))
-
-    let user_from = User.load(event.params.from.toHexString())
-    if (!user_from) {
-      user_from = new User(event.params.from.toHexString())
-      user_from.save()
-    }
-    manipulateAttributeMap(user_from, trait_type, value, BigInt.fromI32(-1))
+  let user_from = User.load(event.params.from.toHexString())
+  if (!user_from) {
+    user_from = new User(event.params.from.toHexString())
+    user_from.save()
   }
+
+  manipulateAttributeMap(user_to, type_name, token.trait, BigInt.fromI32(1))
+  manipulateAttributeMap(user_from, type_name, token.trait, BigInt.fromI32(-1))
+
 }
+
+
+
 
 
 

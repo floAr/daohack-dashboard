@@ -7,13 +7,13 @@ type Token @entity {
   image: String!
   name: String!
   description: String!
+  trait: String!
   owner: User!
   updatedAtTimestamp: BigInt!
 }
 
 type Attribute @entity {
   id: ID!
-  trait_type: String!
   value: String!
   count: BigInt!
   owner: User!
