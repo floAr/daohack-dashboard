@@ -65,8 +65,7 @@
 		}
 		total_weights = new_global_weights;
 		answer_weights = new_answer_weights;
-		console.log(total_weights);
-		console.log(answer_weights);
+
 	};
 
 	const getAnswerWeight = (answer_weights: Trait[]) => {
@@ -78,9 +77,6 @@
 		for (let i = 0; i < total_weights.length; i++) {
 			total_weight += total_weights[i].weight;
 		}
-
-		console.log(answer_weight);
-		console.log(total_weight);
 		return (answer_weight / total_weight) * 100;
 	};
 

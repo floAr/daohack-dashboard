@@ -20,12 +20,10 @@
 		let width = (value.weight / total_count) * 100;
 		style += `width: ${width}%; height:15px;`;
 		style += `background-color: ${getColor(value.value)};`;
-		console.log(style);
 		return style;
 	};
 
 	const getColor = (value: string) => {
-		console.log(value);
 		switch (value) {
 			case 'Non-Binary':
 				return '#ffbf00';
