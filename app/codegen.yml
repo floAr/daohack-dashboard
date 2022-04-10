@@ -1,0 +1,5 @@
+schema: https://hub.snapshot.org/graphql
+generates:
+  ./types.d.ts:
+    plugins:
+      - typescript
